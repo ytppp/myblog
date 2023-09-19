@@ -12,8 +12,8 @@ async function bootstrap() {
         defaultVersion: [common_1.VERSION_NEUTRAL, '1', '2'],
         type: common_1.VersioningType.URI
     });
-    app.useGlobalInterceptors(new transform_interceptor_1.TransformInterceptor());
     app.useGlobalFilters(new base_exception_filter_1.AllExceptionsFilter(), new http_exception_filter_1.HttpExceptionFilter());
+    app.useGlobalInterceptors(new transform_interceptor_1.TransformInterceptor());
     await app.listen(3000);
 }
 bootstrap();
