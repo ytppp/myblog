@@ -26,7 +26,7 @@ export class TransformInterceptor<T>
         extra: {},
         message: 'success',
         success: true,
-      }))
+      })),
     );
   }
 }
