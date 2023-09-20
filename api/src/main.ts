@@ -13,12 +13,12 @@ async function bootstrap() {
     defaultVersion: [VERSION_NEUTRAL, '1', '2'],
     type: VersioningType.URI
   })
+
+  // 统一响应体格式
+  app.useGlobalInterceptors(new TransformInterceptor());
   
   // 异常过滤器
   app.useGlobalFilters(new AllExceptionsFilter(), new HttpExceptionFilter());
-  
-  // 统一响应体格式
-  app.useGlobalInterceptors(new TransformInterceptor());
 
   await app.listen(3000);
 }
