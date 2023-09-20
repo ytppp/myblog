@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ContentsController } from './contents/contents.controller';
+import { ContentModule } from './content/content.module';
 import { getConfig } from './utils';
 
 @Module({
@@ -12,8 +10,9 @@ import { getConfig } from './utils';
       isGlobal: true,
       load: [getConfig],
     }),
+    ContentModule
   ],
-  controllers: [AppController, ContentsController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
