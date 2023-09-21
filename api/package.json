@@ -1,7 +1,7 @@
 {
-  "name": "api",
+  "name": "myblog api",
   "version": "0.0.1",
-  "description": "",
+  "description": "myblog api",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
