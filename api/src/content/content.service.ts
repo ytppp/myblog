@@ -1,15 +1,17 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Injectable, Inject } from '@nestjs/common';
-import { Content } from './content.pg.entity';
+import { Content } from './content.entity';
+import { CreateContentDto } from './dto/create-content.dto';
 
 @Injectable()
 export class ContentService {
   constructor(
-    @Inject('Content_REPOSITORY')
-    private contentRepository: Repository<Content>
-  ) { }
+    @InjectRepository(Content)
+    private readonly contentRepository: Repository<Content>,
+  ) {}
 
-  createOrSave(content) {
-   return this.contentRepository.save(content)
+  create(content: CreateContentDto) {
+    return this.contentRepository.save(content);
   }
 }
