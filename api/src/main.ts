@@ -4,6 +4,7 @@ import {
 } from '@nestjs/platform-fastify';
 import { VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { AllExceptionsFilter } from './common/exceptions/base-exception.filter';
@@ -21,6 +22,9 @@ async function bootstrap() {
 
   // 异常过滤器
   app.useGlobalFilters(new AllExceptionsFilter(), new HttpExceptionFilter());
+
+  // 数据验证
+  app.useGlobalPipes(new ValidationPipe());
 
   // 创建文档
   generateDocument(app);

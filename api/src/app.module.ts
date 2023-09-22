@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ContentModule } from './content/content.module';
+import { ContentsModule } from './contents/contents.module';
 import { getConfig } from './utils';
-// const path = require('path');
 
 const { PG_DATABASE_CONFIG } = getConfig();
 
@@ -14,11 +13,8 @@ const { PG_DATABASE_CONFIG } = getConfig();
       isGlobal: true,
       load: [getConfig],
     }),
-    TypeOrmModule.forRoot({
-      ...PG_DATABASE_CONFIG,
-      // entities: [path.join(__dirname, `/**/*.entity{.ts,.js}`)],
-    }),
-    ContentModule,
+    TypeOrmModule.forRoot(PG_DATABASE_CONFIG),
+    ContentsModule,
   ],
   controllers: [],
   providers: [],
