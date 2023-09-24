@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ContentsModule } from './contents/contents.module';
+import { PostsModule } from './posts/posts.module';
 import { getConfig } from './utils';
+import { CategoriesModule } from './categories/categories.module';
 
 const { PG_DATABASE_CONFIG } = getConfig();
 
@@ -14,7 +15,8 @@ const { PG_DATABASE_CONFIG } = getConfig();
       load: [getConfig],
     }),
     TypeOrmModule.forRoot(PG_DATABASE_CONFIG),
-    ContentsModule,
+    PostsModule,
+    CategoriesModule,
   ],
   controllers: [],
   providers: [],

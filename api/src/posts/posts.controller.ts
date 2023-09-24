@@ -10,24 +10,24 @@ import {
   VERSION_NEUTRAL,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ContentsService } from './contents.service';
-import { CreateContentDto } from './dto/create-content.dto';
-import { UpdateContentDto } from './dto/update-content.dto';
+import { PostsService } from './posts.service';
+import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @Controller({
-  path: 'contents',
+  path: 'posts',
   version: [VERSION_NEUTRAL, '1'],
 })
 @ApiTags('内容管理')
-export class ContentsController {
-  constructor(private readonly contentsService: ContentsService) {}
+export class PostsController {
+  constructor(private readonly postsService: PostsService) {}
 
   @ApiOperation({
     summary: '获取内容列表',
   })
   @Get()
   index(@Query() query: { page: number; per_page: number }) {
-    return this.contentsService.findAll(query);
+    return this.postsService.findAll(query);
   }
 
   @ApiOperation({
@@ -35,23 +35,23 @@ export class ContentsController {
   })
   @Get(':id')
   show(@Param('id') id: string) {
-    return this.contentsService.findOne(id);
+    return this.postsService.findOne(id);
   }
 
   @ApiOperation({
     summary: '增加内容',
   })
   @Post()
-  create(@Body() content: CreateContentDto) {
-    return this.contentsService.create(content);
+  create(@Body() post: CreatePostDto) {
+    return this.postsService.create(post);
   }
 
   @ApiOperation({
     summary: '修改内容',
   })
   @Put(':id')
-  update(@Param('id') id: string, @Body() content: UpdateContentDto) {
-    return this.contentsService.update(id, content);
+  update(@Param('id') id: string, @Body() post: UpdatePostDto) {
+    return this.postsService.update(id, post);
   }
 
   @ApiOperation({
@@ -59,6 +59,6 @@ export class ContentsController {
   })
   @Delete(':id')
   destroy(@Param('id') id: string) {
-    return this.contentsService.destroy(id);
+    return this.postsService.destroy(id);
   }
 }

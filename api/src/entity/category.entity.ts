@@ -1,5 +1,13 @@
-import { Entity, Column, Tree, TreeChildren, TreeParent } from 'typeorm';
+import {
+  Entity,
+  Column,
+  Tree,
+  TreeChildren,
+  TreeParent,
+  OneToMany,
+} from 'typeorm';
 import { CommonEntity } from './common-entity.entity';
+import { Post } from './post.entity';
 
 @Entity()
 @Tree('closure-table')
@@ -12,4 +20,7 @@ export class Category extends CommonEntity {
 
   @TreeParent()
   parent: Category;
+
+  @OneToMany(() => Post, (post) => post.category)
+  posts: Post[];
 }
