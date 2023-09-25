@@ -23,6 +23,14 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @ApiOperation({
+    summary: '增加内容',
+  })
+  @Post()
+  create(@Body() post: CreatePostDto) {
+    return this.postsService.create(post);
+  }
+
+  @ApiOperation({
     summary: '获取内容列表',
   })
   @Get()
@@ -36,14 +44,6 @@ export class PostsController {
   @Get(':id')
   show(@Param('id') id: string) {
     return this.postsService.findOne(id);
-  }
-
-  @ApiOperation({
-    summary: '增加内容',
-  })
-  @Post()
-  create(@Body() post: CreatePostDto) {
-    return this.postsService.create(post);
   }
 
   @ApiOperation({

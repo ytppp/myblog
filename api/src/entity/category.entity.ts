@@ -22,5 +22,5 @@ export class Category extends CommonEntity {
   parent: Category;
 
   @OneToMany(() => Post, (post) => post.category)
-  posts: Post[];
+  posts?: Post[];
 }
