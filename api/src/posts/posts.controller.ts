@@ -4,15 +4,23 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
-  Put,
   Query,
   VERSION_NEUTRAL,
+  ParseIntPipe,
+  UsePipes,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { PostEntity } from './entities/post.entity';
 
 @Controller({
   path: 'posts',
@@ -20,45 +28,54 @@ import { UpdatePostDto } from './dto/update-post.dto';
 })
 @ApiTags('内容管理')
 export class PostsController {
-  constructor(private readonly postsService: PostsService) {}
+  constructor(private readonly service: PostsService) {}
 
   @ApiOperation({
     summary: '增加内容',
   })
+  @ApiCreatedResponse({ type: PostEntity })
   @Post()
-  create(@Body() post: CreatePostDto) {
-    return this.postsService.create(post);
+  create(@Body() createPostDto: CreatePostDto) {
+    return this.service.create(createPostDto);
   }
 
   @ApiOperation({
     summary: '获取内容列表',
   })
+  @ApiOkResponse({ type: PostEntity, isArray: true })
+  @UsePipes(ParseIntPipe)
   @Get()
-  index(@Query() query: { page: number; per_page: number }) {
-    return this.postsService.findAll(query);
+  findAll(@Query('page') page: number, @Query('per_page') per_page: number) {
+    return this.service.findAll({
+      page,
+      per_page,
+    });
   }
 
   @ApiOperation({
     summary: '获取内容详情',
   })
+  @ApiOkResponse({ type: PostEntity })
   @Get(':id')
-  show(@Param('id') id: string) {
-    return this.postsService.findOne(id);
+  findOne(@Param('id') id: string) {
+    return this.service.findOne(id);
   }
 
   @ApiOperation({
     summary: '修改内容',
   })
-  @Put(':id')
-  update(@Param('id') id: string, @Body() post: UpdatePostDto) {
-    return this.postsService.update(id, post);
+  @ApiOkResponse({ type: PostEntity })
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+    return this.service.update(id, updatePostDto);
   }
 
   @ApiOperation({
     summary: '删除内容',
   })
+  @ApiOkResponse({ type: PostEntity })
   @Delete(':id')
-  destroy(@Param('id') id: string) {
-    return this.postsService.destroy(id);
+  remove(@Param('id') id: string) {
+    return this.service.remove(id);
   }
 }

@@ -1,35 +1,52 @@
 import { Injectable } from '@nestjs/common';
-import { Post } from '../entity/post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from 'nestjs-prisma';
+import { BusinessException } from '@/common/exceptions/business.exception';
 
 @Injectable()
 export class PostsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(post: CreatePostDto) {
-    return this.prisma.create(post);
+  async create(createPostDto: CreatePostDto) {
+    return await this.prisma.post.create({ data: createPostDto });
+    // try {
+    //   return await this.prisma.post.create({ data: createPostDto });
+    // } catch (error) {
+    //   throw new BusinessException({
+    //     code: error.code,
+    //     message: error.message,
+    //   });
+    // }
   }
 
-  // async findAll(query: { page: number; per_page: number }) {
-  //   const { page = 1, per_page = 10 } = query;
-  //   const [posts, total] = await this.postRepository.findAndCount({
-  //     skip: (page - 1) * per_page,
-  //     take: per_page,
-  //   });
-  //   return { posts, total };
-  // }
+  async findAll(query: { page: number; per_page: number }) {
+    const { page, per_page } = query;
+    const posts = await this.prisma.post.findMany({
+      skip: (page - 1) * per_page,
+      take: per_page,
+    });
+    const total = await this.prisma.post.count();
+    return {
+      posts: posts,
+      total,
+    };
+  }
 
-  // findOne(id: string) {
-  //   return this.postRepository.findOne({ where: { id } });
-  // }
+  findOne(id: string) {
+    return this.prisma.post.findUnique({ where: { id } });
+  }
 
-  // update(id: string, post: UpdatePostDto) {
-  //   return this.postRepository.update(id, post);
-  // }
+  update(id: string, updatePostDto: UpdatePostDto) {
+    return this.prisma.post.update({
+      where: { id },
+      data: updatePostDto,
+    });
+  }
 
-  // destroy(id: string) {
-  //   return this.postRepository.delete(id);
-  // }
+  remove(id: string) {
+    return this.prisma.post.delete({
+      where: { id },
+    });
+  }
 }

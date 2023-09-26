@@ -1,12 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { PartialType } from '@nestjs/swagger';
+import { CreatePostDto } from './create-post.dto';
 
-export class UpdatePostDto {
-  @ApiProperty({ example: 'cookieboty' })
-  @IsNotEmpty({ message: '标题不能为空' })
-  title: string;
-
-  @ApiProperty({ example: '内容' })
-  @IsNotEmpty({ message: '内容不能为空' })
-  text: string;
-}
+export class UpdatePostDto extends PartialType(CreatePostDto) {}

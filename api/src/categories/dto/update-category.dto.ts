@@ -1,11 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
-import { Category } from '../../entity/category.entity';
+import { PartialType } from '@nestjs/swagger';
+import { CreateCategoryDto } from './create-category.dto';
 
-export class UpdateCategoryDto {
-  @ApiProperty({ example: '首页' })
-  @IsNotEmpty({ message: '栏目名不能为空' })
-  name: string;
-
-  parent?: Category;
-}
+export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {}

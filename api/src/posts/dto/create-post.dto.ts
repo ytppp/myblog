@@ -8,5 +8,5 @@ export class CreatePostDto {
 
   @ApiProperty({ example: '内容' })
   @IsNotEmpty({ message: '内容不能为空' })
-  text: string;
+  content: string;
 }
