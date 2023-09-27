@@ -14,6 +14,9 @@ export class PostEntity implements Post {
   @ApiProperty({ required: false, nullable: true })
   category_id: string | null;
 
+  @ApiProperty({ required: false, nullable: true })
+  user_id: string | null;
+
   @ApiProperty()
   created_at: Date;
 
