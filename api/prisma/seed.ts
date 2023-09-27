@@ -8,6 +8,24 @@ async function main() {
   await prisma.post.deleteMany();
 
   console.log('Seeding...');
+  const user1 = await prisma.user.upsert({
+    where: { name: 'user1' },
+    update: {},
+    create: {
+      name: 'user1',
+      email: 'user1@user1.com',
+      password: '123456',
+    },
+  });
+  const user2 = await prisma.user.upsert({
+    where: { name: 'user2' },
+    update: {},
+    create: {
+      name: 'user2',
+      email: 'user2@user2.com',
+      password: '123456',
+    },
+  });
   const category1 = await prisma.category.upsert({
     where: { name: '111' },
     update: {},
@@ -30,9 +48,9 @@ async function main() {
       content:
         'Support for MongoDB has been one of the most requested features since the initial release of...',
       category_id: category1.id,
+      user_id: user1.id,
     },
   });
-
   const post2 = await prisma.post.upsert({
     where: { title: "What's new in Prisma? (Q1/22)" },
     update: {},
@@ -43,7 +61,6 @@ async function main() {
       category_id: category2.id,
     },
   });
-
   const post3 = await prisma.post.upsert({
     where: { title: 'Prisma Client Just Became a Lot More Flexible' },
     update: {},
@@ -51,10 +68,11 @@ async function main() {
       title: 'Prisma Client Just Became a Lot More Flexible',
       content:
         'Our engineers have been working hard, issuing new releases with many improvements...',
+      user_id: user2.id,
     },
   });
 
-  console.log({ category1, category2, post1, post2, post3 });
+  console.log({ user1, user2, category1, category2, post1, post2, post3 });
 }
 
 // execute the main function
