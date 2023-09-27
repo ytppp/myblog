@@ -1,20 +1,41 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ContentsModule } from './contents/contents.module';
-import { getConfig } from './utils';
-
-const { PG_DATABASE_CONFIG } = getConfig();
+import { PostsModule } from './posts/posts.module';
+import { CategoriesModule } from './categories/categories.module';
+import { PrismaModule } from 'nestjs-prisma';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      ignoreEnvFile: true,
       isGlobal: true,
-      load: [getConfig],
+      envFilePath: process.env.RUNNING_ENV === 'dev' ? '.env.dev' : '.env.prod',
     }),
-    TypeOrmModule.forRoot(PG_DATABASE_CONFIG),
-    ContentsModule,
+    PrismaModule.forRoot({
+      isGlobal: true,
+      // prismaServiceOptions: {
+      //   prismaOptions: {
+      //     datasourceUrl: process.env.DATABASE_URL,
+      //   },
+      // },
+      // useFactory: async (configService: ConfigService) => {
+      //   console.log(configService.get('DATABASE_URL'));
+      //   return {
+      //     prismaOptions: {
+      //       datasources: {
+      //         db: {
+      //           url: configService.get('DATABASE_URL'),
+      //         },
+      //       },
+      //     },
+      //     explicitConnect: false,
+      //   };
+      // },
+      // inject: [ConfigService],
+    }),
+    PostsModule,
+    CategoriesModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],
