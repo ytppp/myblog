@@ -35,8 +35,8 @@ export class PostsController {
   })
   @ApiCreatedResponse({ type: PostEntity })
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.service.create(createPostDto);
+  async create(@Body() createPostDto: CreatePostDto) {
+    return new PostEntity(await this.service.create(createPostDto));
   }
 
   @ApiOperation({
@@ -45,11 +45,18 @@ export class PostsController {
   @ApiOkResponse({ type: PostEntity, isArray: true })
   @UsePipes(ParseIntPipe)
   @Get()
-  findAll(@Query('page') page: number, @Query('per_page') per_page: number) {
-    return this.service.findAll({
+  async findAll(
+    @Query('page') page: number,
+    @Query('per_page') per_page: number,
+  ) {
+    const { posts, total } = await this.service.findAll({
       page,
       per_page,
     });
+    return {
+      posts: posts.map((post) => new PostEntity(post)),
+      total,
+    };
   }
 
   @ApiOperation({
@@ -57,8 +64,8 @@ export class PostsController {
   })
   @ApiOkResponse({ type: PostEntity })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.service.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return new PostEntity(await this.service.findOne(id));
   }
 
   @ApiOperation({
@@ -66,8 +73,8 @@ export class PostsController {
   })
   @ApiOkResponse({ type: PostEntity })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.service.update(id, updatePostDto);
+  async update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+    return new PostEntity(await this.service.update(id, updatePostDto));
   }
 
   @ApiOperation({
@@ -75,7 +82,14 @@ export class PostsController {
   })
   @ApiOkResponse({ type: PostEntity })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.service.remove(id);
+  async remove(@Param('id') id: string) {
+    return new PostEntity(await this.service.remove(id));
+  }
+
+  @Get('findError')
+  findError() {
+    const a: any = {};
+    console.log(a.b.c);
+    return '1231';
   }
 }

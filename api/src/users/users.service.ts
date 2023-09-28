@@ -13,13 +13,13 @@ export class UsersService {
 
   async findAll(query: { page: number; per_page: number }) {
     const { page, per_page } = query;
-    const posts = await this.prisma.user.findMany({
+    const users = await this.prisma.user.findMany({
       skip: (page - 1) * per_page,
       take: per_page,
     });
     const total = await this.prisma.user.count();
     return {
-      posts: posts,
+      users: users,
       total,
     };
   }
