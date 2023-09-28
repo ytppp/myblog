@@ -21,6 +21,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
+import { AuthEntity } from './entities/auth.entity';
+import { LoginDto } from './dto/login.dto';
 
 @Controller({
   path: 'users',
@@ -84,5 +86,14 @@ export class UsersController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return new UserEntity(await this.service.remove(id));
+  }
+
+  @ApiOperation({
+    summary: '登录',
+  })
+  @ApiCreatedResponse({ type: AuthEntity })
+  @Post('login')
+  async login(@Body() { email, password }: LoginDto) {
+    return await this.service.login(email, password);
   }
 }
