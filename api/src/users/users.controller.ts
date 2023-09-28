@@ -1,34 +1,88 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  VERSION_NEUTRAL,
+  UsePipes,
+  ParseIntPipe,
+  Query,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import {
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import { UserEntity } from './entities/user.entity';
 
-@Controller('users')
+@Controller({
+  path: 'users',
+  version: [VERSION_NEUTRAL, '1'],
+})
+@ApiTags('用户管理')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly service: UsersService) {}
 
+  @ApiOperation({
+    summary: '增加用户',
+  })
+  @ApiCreatedResponse({ type: UserEntity })
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    return new UserEntity(await this.service.create(createUserDto));
   }
 
+  @ApiOperation({
+    summary: '获取用户列表',
+  })
+  @ApiOkResponse({ type: UserEntity, isArray: true })
+  @UsePipes(ParseIntPipe)
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  async findAll(
+    @Query('page') page: number,
+    @Query('per_page') per_page: number,
+  ) {
+    const { users, total } = await this.service.findAll({
+      page,
+      per_page,
+    });
+    return {
+      users: users.map((user) => new UserEntity(user)),
+      total,
+    };
   }
 
+  @ApiOperation({
+    summary: '获取用户',
+  })
+  @ApiOkResponse({ type: UserEntity })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return new UserEntity(await this.service.findOne(id));
   }
 
+  @ApiOperation({
+    summary: '修改用户',
+  })
+  @ApiOkResponse({ type: UserEntity })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return new UserEntity(await this.service.update(id, updateUserDto));
   }
 
+  @ApiOperation({
+    summary: '删除用户',
+  })
+  @ApiOkResponse({ type: UserEntity })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return new UserEntity(await this.service.remove(id));
   }
 }

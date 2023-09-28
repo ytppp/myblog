@@ -25,6 +25,7 @@ export class PostsService {
     const posts = await this.prisma.post.findMany({
       skip: (page - 1) * per_page,
       take: per_page,
+      include: { category: true, user: true },
     });
     const total = await this.prisma.post.count();
     return {
@@ -36,7 +37,7 @@ export class PostsService {
   findOne(id: string) {
     return this.prisma.post.findUnique({
       where: { id },
-      include: { category: true },
+      include: { category: true, user: true },
     });
   }
 
