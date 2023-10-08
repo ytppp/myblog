@@ -10,19 +10,20 @@ import {
   UsePipes,
   ParseIntPipe,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
-import { AuthEntity } from './entities/auth.entity';
-import { LoginDto } from './dto/login.dto';
+import { JwtAuthGuard } from '@/auths/jwt-auth.guard';
 
 @Controller({
   path: 'users',
@@ -44,6 +45,8 @@ export class UsersController {
   @ApiOperation({
     summary: '获取用户列表',
   })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: UserEntity, isArray: true })
   @UsePipes(ParseIntPipe)
   @Get()
@@ -64,6 +67,8 @@ export class UsersController {
   @ApiOperation({
     summary: '获取用户',
   })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: UserEntity })
   @Get(':id')
   async findOne(@Param('id') id: string) {
@@ -73,6 +78,8 @@ export class UsersController {
   @ApiOperation({
     summary: '修改用户',
   })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: UserEntity })
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
@@ -82,18 +89,11 @@ export class UsersController {
   @ApiOperation({
     summary: '删除用户',
   })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: UserEntity })
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return new UserEntity(await this.service.remove(id));
-  }
-
-  @ApiOperation({
-    summary: '登录',
-  })
-  @ApiCreatedResponse({ type: AuthEntity })
-  @Post('login')
-  async login(@Body() { email, password }: LoginDto) {
-    return await this.service.login(email, password);
   }
 }

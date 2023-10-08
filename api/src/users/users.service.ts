@@ -1,22 +1,22 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { LoginDto } from './dto/login.dto';
+import * as bcrypt from 'bcrypt';
+
+export const roundsOfHashing = 10;
 
 @Injectable()
 export class UsersService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
+    const hashedPassword = await bcrypt.hash(
+      createUserDto.password,
+      roundsOfHashing,
+    );
+
+    createUserDto.password = hashedPassword;
     return await this.prisma.user.create({ data: createUserDto });
   }
 
@@ -39,7 +39,15 @@ export class UsersService {
     });
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    if (updateUserDto.password) {
+      const hashedPassword = await bcrypt.hash(
+        updateUserDto.password,
+        roundsOfHashing,
+      );
+
+      updateUserDto.password = hashedPassword;
+    }
     return this.prisma.user.update({
       where: { id },
       data: updateUserDto,
@@ -50,28 +58,5 @@ export class UsersService {
     return this.prisma.user.delete({
       where: { id },
     });
-  }
-
-  async login(email, password) {
-    // Step 1: Fetch a user with the given email
-    const user = await this.prisma.user.findUnique({ where: { email: email } });
-
-    // If no user is found, throw an error
-    if (!user) {
-      throw new NotFoundException(`No user found for email: ${email}`);
-    }
-
-    // Step 2: Check if the password is correct
-    const isPasswordValid = user.password === password;
-
-    // If password does not match, throw an error
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid password');
-    }
-
-    // Step 3: Generate a JWT containing the user's ID and return it
-    return {
-      accessToken: this.jwtService.sign({ userId: user.id }),
-    };
   }
 }
