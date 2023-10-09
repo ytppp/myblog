@@ -1,6 +1,6 @@
 import { Body, Controller, Post, VERSION_NEUTRAL } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthsService } from './auths.service';
+import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { AuthEntity } from './entities/auth.entity';
 
@@ -9,8 +9,8 @@ import { AuthEntity } from './entities/auth.entity';
   version: [VERSION_NEUTRAL, '1'],
 })
 @ApiTags('权限管理')
-export class AuthsController {
-  constructor(private readonly service: AuthsService) {}
+export class AuthController {
+  constructor(private readonly service: AuthService) {}
 
   @ApiOperation({
     summary: '登录',

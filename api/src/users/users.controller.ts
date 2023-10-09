@@ -23,7 +23,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
-import { JwtAuthGuard } from '@/auths/jwt-auth.guard';
+import { JwtAuthGuard } from '@/auth/jwt-auth.guard';
 
 @Controller({
   path: 'users',
