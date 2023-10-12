@@ -1,13 +1,10 @@
 import type { App } from 'vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
-const Home = { template: '<div>Home</div>' }
-const About = { template: '<div>About</div>' }
 
 export const router = createRouter({
   history: createWebHashHistory(),
   routes: [
-    { path: '/', component: Home },
-    { path: '/about', component: About },
+    { path: '/', component: () => import('@/views/login/index.vue') },
   ],
   strict: true,
   scrollBehavior: () => ({ left: 0, top: 0 }),

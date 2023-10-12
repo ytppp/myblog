@@ -1,20 +1,24 @@
 import { createApp } from 'vue';
 import { setupRouter } from '@/router';
-import { setupI18n } from '@/locale';
+import { setupI18n } from '@/locales';
 import { setupStore } from '@/store';
 import App from './App.vue';
 import 'ant-design-vue/dist/reset.css';
+import { initAppConfigStore } from './logics/init';
 
 async function bootstrap() {
   const app = createApp(App)
   
-  // 配置 store
+  // Configure store
   setupStore(app);
 
-  // 多语言配置
-  setupI18n(app);
+  // Initialize internal system configuration
+  initAppConfigStore()
 
-  // 配置 路由
+  // Configure i18n
+  await setupI18n(app);
+
+  // Configure routing
   setupRouter(app);
   
   app.mount('#app')

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-doc_branch=$1
+trans_dir=$1
 project_dir=$(pwd)
 
 source=(en-US.json zh-CN.json)
@@ -31,19 +31,19 @@ if [ ${#source[*]} != ${#target[*]} ];then
 fi
 
 # 检查是否指定分支
-if [[ $doc_branch == "" ]]
+if [[ $trans_dir == "" ]]
 then
-  beautify_echo "repo branch required..." error
+  beautify_echo "trans dir required..." error
   exit -1
 fi
 
-cd ../docs/trans/$doc_branch
+cd ../docs/trans/$trans_dir
 
 beautify_echo "copy i18n files..." info
 for((j=0;j<${#source[*]};j++)) do
-  if [ ! -d $project_dir/src/locale/lang ];then
-    mkdir -p $project_dir/src/locale/lang
+  if [ ! -d $project_dir/src/locales/lang/trans ];then
+    mkdir -p $project_dir/src/locale/lang/trans
   fi
-  cp -f ${source[j]} $project_dir/src/locale/lang/${target[j]}
+  cp -f ${source[j]} $project_dir/src/locale/lang/trans/${target[j]}
 done
 beautify_echo "complete copy all customers i18n files..." success

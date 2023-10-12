@@ -1,17 +1,16 @@
 <template>
-  <a-config-provider :locale="locale">
+  <a-config-provider :locale="getAntdLocale">
     <router-view></router-view>
   </a-config-provider>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import zhCN from 'ant-design-vue/es/locale/zh_CN';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
+import { useLocale } from './locales/useLocale';
 
 dayjs.locale('zh-cn');
-const locale = ref(zhCN.locale);
+const { getAntdLocale } = useLocale();
 </script>
 
 <style scoped>
