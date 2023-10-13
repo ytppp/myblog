@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
-import { useLocale } from './locales/useLocale';
+import { useLocale } from './locale/useLocale';
 
 dayjs.locale('zh-cn');
 const { getAntdLocale } = useLocale();

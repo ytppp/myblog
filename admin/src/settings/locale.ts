@@ -6,9 +6,7 @@ export const LOCALE: { [key: string]: LangType } = {
 };
 
 export const localeStoreSetting: ILocaleStore = {
-  lang: LOCALE.ZH_CN,
-  // Default locale
-  fallback: LOCALE.ZH_CN,
-  // available Locales
-  availableLocales: [LOCALE.ZH_CN, LOCALE.EN_US],
+  lang: LOCALE.EN_US,
+  fallbackLang: LOCALE.ZH_CN,
+  availableLangs: [LOCALE.ZH_CN, LOCALE.EN_US],
 };
