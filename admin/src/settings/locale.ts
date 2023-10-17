@@ -1,12 +1,24 @@
 import type { LangType, ILocaleStore } from '#/config';
+import { IDropMenu } from '@/components/dropdown';
 
-export const LOCALE: { [key: string]: LangType } = {
+export const LANG: { [key: string]: LangType } = {
   ZH_CN: 'zh-CN',
   EN_US: 'en-US',
 };
 
 export const localeStoreSetting: ILocaleStore = {
-  lang: LOCALE.EN_US,
-  fallbackLang: LOCALE.ZH_CN,
-  availableLangs: [LOCALE.ZH_CN, LOCALE.EN_US],
+  lang: LANG.EN_US,
+  fallbackLang: LANG.ZH_CN,
+  availableLangs: [LANG.ZH_CN, LANG.EN_US],
 };
+
+export const langList: IDropMenu[] = [
+  {
+    text: '简体中文',
+    key: LANG.ZH_CN,
+  },
+  {
+    text: 'English',
+    key: LANG.EN_US,
+  },
+];

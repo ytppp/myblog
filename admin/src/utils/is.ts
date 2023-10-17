@@ -13,3 +13,7 @@ export function isNull(val: unknown): val is null {
 export function isNullOrUnDef(val: unknown): val is null | undefined {
   return isUnDef(val) || isNull(val);
 }
+
+export function isFunction(val: unknown): val is Function {
+  return typeof val === 'function';
+}

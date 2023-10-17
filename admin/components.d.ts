@@ -9,9 +9,15 @@ declare module 'vue' {
   export interface GlobalComponents {
     AButton: typeof import('ant-design-vue/es')['Button']
     AConfigProvider: typeof import('ant-design-vue/es')['ConfigProvider']
+    ADropdown: typeof import('ant-design-vue/es')['Dropdown']
+    AMenu: typeof import('ant-design-vue/es')['Menu']
+    AMenuDivider: typeof import('ant-design-vue/es')['MenuDivider']
+    AMenuItem: typeof import('ant-design-vue/es')['MenuItem']
+    APopconfirm: typeof import('ant-design-vue/es')['Popconfirm']
     ASpace: typeof import('ant-design-vue/es')['Space']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Src: typeof import('./src/components/dropdown/src/index.vue')['default']
   }
 }

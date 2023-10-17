@@ -5,15 +5,19 @@ import { setupStore } from '@/store';
 import App from './App.vue';
 import 'ant-design-vue/dist/reset.css';
 import { initAppConfigStore } from './logics/init';
+import { registerGlobComp } from './components/registerGlobComp';
 
 async function bootstrap() {
-  const app = createApp(App)
+  const app = createApp(App);
   
   // Configure store
   setupStore(app);
 
   // Initialize internal system configuration
-  initAppConfigStore()
+  initAppConfigStore();
+
+  // register global components
+  registerGlobComp(app);
 
   // Configure i18n
   await setupI18n(app);
@@ -21,7 +25,7 @@ async function bootstrap() {
   // Configure routing
   setupRouter(app);
   
-  app.mount('#app')
+  app.mount('#app');
 }
 
 bootstrap()
