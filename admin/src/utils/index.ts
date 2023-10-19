@@ -19,7 +19,6 @@ export type CustomComponent = Component & { displayName?: string };
 export const withInstall = <T extends CustomComponent>(component: T, alias?: string) => {
   (component as Record<string, unknown>).install = (app: App) => {
     const compName = component.name || component.displayName;
-    console.log('compName', component, compName)
     if (!compName) return;
     app.component(compName, component);
     if (alias) {

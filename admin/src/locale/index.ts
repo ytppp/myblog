@@ -1,4 +1,4 @@
-import type { LangType } from '#/config';
+import type { LangType } from '@/constants/config';
 import { localeStoreSetting } from '@/settings/locale';
 import { useLocaleStoreWithOut } from '@/store/modules/locale';
 import type { App } from 'vue';

@@ -1,4 +1,4 @@
-import type { LangType, ILocaleStore } from '#/config';
+import type { LangType, ILocaleStore } from '@/constants/config';
 import { IDropMenu } from '@/components/dropdown';
 
 export const LANG: { [key: string]: LangType } = {

@@ -38,11 +38,10 @@
 
 <script lang="ts" setup> 
 import { computed, PropType } from 'vue';
-import { type Recordable } from '#/utils';
 // import Icon from '@/components/Icon/Icon.vue';
 import { omit } from 'lodash-es';
 import { isFunction } from '@/utils/is';
-import { type IDropMenu } from './type';
+import { type IDropMenu } from './types';
 
 defineOptions({
   name: 'MyDropdown',
@@ -92,4 +91,4 @@ const getPopConfirmAttrs = computed(() => {
 });
 
 const getAttr = (key: string | number) => ({ key });
-</script>
+</script>./types

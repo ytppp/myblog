@@ -5,7 +5,6 @@ import {
 } from '@/settings/encryption';
 import { getStorageShortName } from '../env';
 import { AesEncryption, EncryptionParams } from '../encryption';
-import { Nullable } from '#/utils';
 import { isNullOrUnDef } from '../is';
 
 export interface CreateStorageParams extends EncryptionParams {

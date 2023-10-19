@@ -1,7 +1,7 @@
 import { useLocaleStoreWithOut } from "@/store/modules/locale";
 import { computed, unref } from "vue";
 import { i18n, setHtmlPageLang } from ".";
-import type { LangType } from "#/config";
+import type { LangType } from "@/constants/config";
 
 function setI18nLanguage(lang: LangType) {
   const localeStore = useLocaleStoreWithOut();
@@ -38,9 +38,14 @@ export function useLocale() {
     return lang;
   }
 
+  function translate(key: string) {
+    return i18n.global.t(key);
+  }
+
   return {
     getLang,
     getAntdLocale,
-    changeLang
+    changeLang,
+    translate
   };
 }

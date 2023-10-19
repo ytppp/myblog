@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { LangType } from '#/config';
+import { LangType } from '@/constants/config';
 import { type IDropMenu } from '@/components/dropdown';
 import { useLocale } from '@/locale/useLocale';
 import { computed, ref, unref, watchEffect } from 'vue';
