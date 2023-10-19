@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 import { store } from '@/store';
-import type { LangType, ILocaleStore } from '#/config';
+import type { LangType, ILocaleStore } from '@/constants/config';
 import { localeStoreSetting } from '@/settings/locale';
 import { createLocalStorage } from '@/utils/cache/storage';
-import { LOCALE_KEY } from '@/enum/cache';
+import { LOCALE_KEY } from '@/constants/cache';
 
 interface ILocaleStoreState {
   localeStore: ILocaleStore;
