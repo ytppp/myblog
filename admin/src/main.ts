@@ -1,11 +1,12 @@
 import { createApp } from 'vue';
-import { setupRouter } from '@/router';
+import { router, setupRouter } from '@/router';
 import { setupI18n } from '@/locale';
 import { setupStore } from '@/store';
 import App from './App.vue';
 import 'ant-design-vue/dist/reset.css';
 import { initAppConfigStore } from './logics/init';
 import { registerGlobComp } from './components/registerGlobComp';
+import { setupRouterGuard } from './router/guard';
 
 async function bootstrap() {
   const app = createApp(App);
@@ -24,6 +25,9 @@ async function bootstrap() {
 
   // Configure routing
   setupRouter(app);
+
+  // router-guard
+  setupRouterGuard(router);
   
   app.mount('#app');
 }

@@ -2,9 +2,8 @@ import type { AppRouteRecordRaw } from '../types';
 import {
   REDIRECT_NAME,
   PAGE_NOT_FOUND_NAME,
+  LAYOUT
 } from '@/constants/page';
-
-export const LAYOUT = () => import('@/layouts/default/index.vue');
 
 // 404 on a page
 export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
