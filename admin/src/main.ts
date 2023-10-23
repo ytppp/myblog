@@ -4,7 +4,7 @@ import { setupI18n } from '@/locale';
 import { setupStore } from '@/store';
 import App from './App.vue';
 import 'ant-design-vue/dist/reset.css';
-import { initAppConfigStore } from './logics/init';
+import { initAppConfigStore } from './init';
 import { registerGlobComp } from './components/registerGlobComp';
 import { setupRouterGuard } from './router/guard';
 

@@ -1,4 +1,4 @@
-import { GlobEnvConfig } from '#/config';
+import { GlobEnvConfig } from '@/constants/config';
 import pkg from '../../package.json';
 
 // Generate cache key according to version
