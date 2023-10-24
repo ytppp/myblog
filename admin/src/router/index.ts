@@ -1,8 +1,7 @@
 import type { App } from 'vue';
 import type { RouteRecordRaw } from 'vue-router';
 import { createRouter, createWebHashHistory } from 'vue-router';
-import { basicRoutes } from './routes';
-import { PAGE_NOT_FOUND_ROUTE } from './routes/basic';
+import { basicRoutes, PAGE_NOT_FOUND_ROUTE } from './routes/basic';
 import { AppRouteRecordRaw } from './types';
 
 // import.meta.glob() 直接引入所有的模块 Vite 独有的功能

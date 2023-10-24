@@ -5,8 +5,6 @@ export enum PageEnum {
   ERROR_LOG_PAGE = '/error-log/list',
 }
 
-export const REDIRECT_NAME = 'Redirect';
-
 export const PARENT_LAYOUT_NAME = 'ParentLayout';
 
 export const PAGE_NOT_FOUND_NAME = 'PageNotFound';

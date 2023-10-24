@@ -13,7 +13,7 @@ const ls = createLocalStorage();
 const lsDefault = (ls.get(LOCALE_KEY) || localeStoreSetting) as ILocaleStore;
 
 export const useLocaleStore = defineStore({
-  id: 'locale-store',
+  id: 'app-locale-store',
   state: (): ILocaleStoreState => ({
     localeStore: lsDefault,
   }),
@@ -30,9 +30,6 @@ export const useLocaleStore = defineStore({
       };
       ls.set(LOCALE_KEY, this.localeStore);
     },
-    /**
-     * Initialize multilingual information and load the existing configuration from the local cache
-     */
     initLocale() {
       this.setLocaleStore({
         ...localeStoreSetting,
