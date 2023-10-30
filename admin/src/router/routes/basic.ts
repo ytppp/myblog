@@ -1,10 +1,30 @@
+import { PageEnum } from '@/constants/page';
 import type { AppRouteRecordRaw } from '../types';
+import { mainOutRoutes } from './main-out';
 import {
-  REDIRECT_NAME,
   PAGE_NOT_FOUND_NAME,
+  LAYOUT
 } from '@/constants/page';
 
-export const LAYOUT = () => import('@/layouts/default/index.vue');
+// 登录路由
+export const LoginRoute: AppRouteRecordRaw = {
+  path: '/login',
+  name: 'Login',
+  component: () => import('@/views/login/index.vue'),
+  meta: {
+    title: 'Login',
+  },
+};
+
+// 根路由
+export const RootRoute: AppRouteRecordRaw = {
+  path: '/',
+  name: 'Root',
+  redirect: PageEnum.BASE_HOME,
+  meta: {
+    title: 'Root',
+  },
+};
 
 // 404 on a page
 export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
@@ -30,29 +50,6 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
   ],
 };
 
-// redirect
-export const REDIRECT_ROUTE: AppRouteRecordRaw = {
-  path: '/redirect',
-  component: LAYOUT,
-  name: 'RedirectTo',
-  meta: {
-    title: REDIRECT_NAME,
-    hideBreadcrumb: true,
-    hideMenu: true,
-  },
-  children: [
-    {
-      path: '/redirect/:path(.*)/:_redirect_type(.*)/:_origin_params(.*)?',
-      name: REDIRECT_NAME,
-      component: LAYOUT,
-      meta: {
-        title: REDIRECT_NAME,
-        hideBreadcrumb: true,
-      },
-    },
-  ],
-};
-
 // error log
 export const ERROR_LOG_ROUTE: AppRouteRecordRaw = {
   path: '/error-log',
@@ -61,8 +58,6 @@ export const ERROR_LOG_ROUTE: AppRouteRecordRaw = {
   redirect: '/error-log/list',
   meta: {
     title: 'ErrorLog',
-    hideBreadcrumb: true,
-    hideChildrenInMenu: true,
   },
   children: [
     {
@@ -71,9 +66,14 @@ export const ERROR_LOG_ROUTE: AppRouteRecordRaw = {
       component: () => import('@/views/sys/error-log/index.vue'),
       meta: {
         title: 'ErrorLogList',
-        hideBreadcrumb: true,
-        currentActiveMenu: '/error-log',
       },
     },
   ],
 };
+
+export const basicRoutes = [
+  RootRoute,
+  LoginRoute,
+  ...mainOutRoutes,
+  PAGE_NOT_FOUND_ROUTE,
+];
