@@ -10,7 +10,7 @@ import { setupRouterGuard } from './router/guard';
 
 async function bootstrap() {
   const app = createApp(App);
-  
+ 
   // Configure store
   setupStore(app);
 
