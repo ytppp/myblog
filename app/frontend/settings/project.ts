@@ -1,8 +1,7 @@
-import { CacheTypeEnum, PermissionModeEnum, type ProjectConfig } from "@/constants/config";
+import { CacheTypeEnum, type ProjectConfig } from "@/constants/config";
 
 const setting: ProjectConfig = {
-  permissionMode: PermissionModeEnum.ROUTE_MAPPING,
-  permissionCacheType: CacheTypeEnum.LOCAL,
+  authCacheType: CacheTypeEnum.LOCAL,
 }
 
 export default setting;
