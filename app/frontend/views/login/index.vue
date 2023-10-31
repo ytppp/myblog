@@ -1,5 +1,5 @@
 <template>
-  <div>{{ $t('trans0001', { msg: 'hello' }) }}</div>
+  <div class="text-3xl font-bold underline">{{ $t('trans0001', { msg: 'hello' }) }}</div>
   <my-dropdown
     placement="bottom"
     :trigger="['click']"
@@ -8,8 +8,9 @@
     @menu-event="handleMenuEvent"
     overlayClassName="app-locale-picker-overlay"
   >
-    <span class="cursor-pointer flex items-center">
+    <span class="cursor-pointer">
       <span v-if="showText" class="ml-1">{{ getLangText }}</span>
+      <DownOutlined />
     </span>
   </my-dropdown>
 </template>
@@ -20,6 +21,7 @@ import { type IDropMenu } from '@/components/dropdown';
 import { useLocale } from '@/locale/useLocale';
 import { computed, ref, unref, watchEffect } from 'vue';
 import { langList } from '@/settings/locale';
+import { DownOutlined } from '@ant-design/icons-vue';
 
 const { changeLang, getLang } = useLocale();
 const selectedKeys = ref<string[]>([]);

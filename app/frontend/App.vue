@@ -12,6 +12,3 @@ import { useLocale } from './locale/useLocale';
 dayjs.locale('zh-cn');
 const { getAntdLocale } = useLocale();
 </script>
-
-<style scoped>
-</style>
