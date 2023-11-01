@@ -30,7 +30,7 @@ export const useUserStore = defineStore({
   },
   actions: {
     setToken(token: string | undefined) {
-      this.token = token ? token : ''; // for null or undefined value
+      this.token = token ? token : '';
       setAuthCache(TOKEN_KEY, token);
     },
     setPermissions(permissions: string[]) {
