@@ -17,11 +17,11 @@ function setI18nLanguage(lang: LangType) {
 
 export function useLocale() {
   const localeStore = useLocaleStoreWithOut();
+  
   const getLang = computed(() => localeStore.getLang);
   const getAntdLocale = computed((): any => {
     return (i18n.global.getLocaleMessage(unref(getLang)) as any)?.localeAntd ?? {};
   });
-
   async function changeLang(lang: LangType) {
     const globalI18n = i18n.global;
     const currentLang = unref(globalI18n.locale);
@@ -38,8 +38,9 @@ export function useLocale() {
     return lang;
   }
 
-  function translate(key: string) {
-    return i18n.global.t(key);
+  function translate(key:string, ...arg: any[]) {
+    // @ts-ignore
+    return i18n.global.t(key, ...arg);
   }
 
   return {

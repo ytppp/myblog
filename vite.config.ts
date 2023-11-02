@@ -24,7 +24,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': pathResolve('app/frontend'),
-      '#': pathResolve('app/frontend/types')
+      '#': pathResolve('types')
     }
   }
 })

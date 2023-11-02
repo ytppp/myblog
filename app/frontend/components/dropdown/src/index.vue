@@ -17,15 +17,15 @@
               :disabled="item.disabled"
             >
               <template #icon v-if="item.popConfirm.icon">
-                <!-- <Icon :icon="item.popConfirm.icon" /> -->
+                <Icon :icon="item.popConfirm.icon" />
               </template>
               <div>
-                <!-- <Icon :icon="item.icon" v-if="item.icon" /> -->
+                <Icon :icon="item.icon" v-if="item.icon" />
                 <span class="ml-1">{{ item.text }}</span>
               </div>
             </a-popconfirm>
             <template v-else>
-              <!-- <Icon :icon="item.icon" v-if="item.icon" /> -->
+              <Icon :icon="item.icon" v-if="item.icon" />
               <span class="ml-1">{{ item.text }}</span>
             </template>
           </a-menu-item>
@@ -38,7 +38,6 @@
 
 <script lang="ts" setup> 
 import { computed, PropType } from 'vue';
-// import Icon from '@/components/Icon/Icon.vue';
 import { omit } from 'lodash-es';
 import { isFunction } from '@/utils/is';
 import { type IDropMenu } from './types';
@@ -91,4 +90,4 @@ const getPopConfirmAttrs = computed(() => {
 });
 
 const getAttr = (key: string | number) => ({ key });
-</script>./types
+</script>
