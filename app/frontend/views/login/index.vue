@@ -1,5 +1,5 @@
 <template>
-  <div class="text-3xl font-bold underline">{{ $t('trans0001', { msg: 'hello' }) }}</div>
+  <div class="text-3xl font-bold underline">{{ $t('trans0001') }}</div>
   <my-dropdown
     placement="bottom"
     :trigger="['click']"

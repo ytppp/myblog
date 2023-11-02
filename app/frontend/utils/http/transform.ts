@@ -3,7 +3,7 @@ import { AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestC
 
 export abstract class AxiosTransform {
   /**
-   * 在发送请求之前调用的函数。它可以根据需要修改请求配置。
+   * 根据需要修改请求配置, 在发送请求之前调用。
    */
   beforeRequestHook?: (config: AxiosRequestConfig, options: RequestOptions) => AxiosRequestConfig;
 

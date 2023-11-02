@@ -36,4 +36,10 @@ export enum CacheTypeEnum {
 
 export interface ProjectConfig {
   authCacheType: CacheTypeEnum;
+  sessionTimeoutProcessing: SessionTimeoutProcessingEnum;
+}
+
+export enum SessionTimeoutProcessingEnum {
+  ROUTE_JUMP,
+  PAGE_COVERAGE,
 }

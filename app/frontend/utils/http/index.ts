@@ -1,16 +1,20 @@
 import { clone, isString } from "lodash-es";
 import { deepMerge, setObjToUrlParams } from "..";
-import { AxiosBox } from "./axios";
-import { AxiosTransform, CreateAxiosOptions } from "./axios-transform";
+import { AxiosBox } from "./box";
+import { AxiosTransform, CreateAxiosOptions } from "./transform";
 import { AxiosInstance, AxiosResponse } from "axios";
 import { ContentTypeEnum, RequestEnum, RequestOptions, Result, ResultEnum } from "@/constants/http";
 import axios from 'axios';
 import { getToken } from "../auth";
 import { formatRequestDate, joinTimestamp } from "./helper";
-import { useI18n } from "vue-i18n";
+import { useLocale } from "@/locale/useLocale";
 import { isEmpty, isNull, isUnDef } from "../is";
 import { useUserStoreWithOut } from "@/store/modules/user";
-import { AxiosRetry } from "./axios-retry";
+import { AxiosRetry } from "./retry";
+import { useMessage } from "@/hooks/useMessage";
+
+
+const { createMessage, createErrorModal, createSuccessModal } = useMessage();
 
 /**
  * @description: 数据处理，方便区分多种处理方式
@@ -33,8 +37,8 @@ const transform: AxiosTransform = {
     const data = config.data || false;
     formatDate && data && !isString(data) && formatRequestDate(data);
     if (config.method?.toUpperCase() === RequestEnum.GET) {
+      // 给 get 请求加上时间戳参数，避免从缓存中拿数据。
       if (!isString(params)) {
-        // 给 get 请求加上时间戳参数，避免从缓存中拿数据。
         config.params = Object.assign(params || {}, joinTimestamp(joinTime, false));
       } else {
         // 兼容restful风格
@@ -75,7 +79,7 @@ const transform: AxiosTransform = {
    * @description: 处理响应数据。如果数据不是预期格式，可直接抛出错误
    */
   transformResponseHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
-    const { t } = useI18n();
+    const { translate } = useLocale();
     const { isTransformResponse, isReturnNativeResponse } = options;
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性
     if (isReturnNativeResponse) {
@@ -87,13 +91,12 @@ const transform: AxiosTransform = {
       return res.data;
     }
     // 错误的时候返回
-
     const { data } = res;
     if (!data) {
       // return '[HTTP] Request has no return value';
-      throw new Error(t('sys.api.apiRequestFailed'));
+      throw new Error(translate('trans0001'));
     }
-    //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
+    //  这里 code，result，message为后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
     const { code, result, message } = data;
 
     // 这里逻辑可以根据项目进行修改
@@ -102,13 +105,13 @@ const transform: AxiosTransform = {
       let successMsg = message;
 
       if (isNull(successMsg) || isUnDef(successMsg) || isEmpty(successMsg)) {
-        successMsg = t(`sys.api.operationSuccess`);
+        successMsg = translate(`trans0002`);
       }
 
       if (options.successMessageMode === 'modal') {
-        // createSuccessModal({ title: t('sys.api.successTip'), content: successMsg });
+        createSuccessModal({ title: translate('trans0003'), content: successMsg });
       } else if (options.successMessageMode === 'message') {
-        // createMessage.success(successMsg);
+        createMessage.success(successMsg);
       }
       return result;
     }
@@ -118,9 +121,9 @@ const transform: AxiosTransform = {
     let timeoutMsg = '';
     switch (code) {
       case ResultEnum.TIMEOUT:
-        timeoutMsg = t('sys.api.timeoutMessage');
+        timeoutMsg = translate('trans0004');
         const userStore = useUserStoreWithOut();
-        // userStore.logout(true);
+        userStore.logout(true);
         break;
       default:
         if (message) {
@@ -131,12 +134,12 @@ const transform: AxiosTransform = {
     // errorMessageMode='modal'的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
     // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
     if (options.errorMessageMode === 'modal') {
-      // createErrorModal({ title: t('sys.api.errorTip'), content: timeoutMsg });
+      createErrorModal({ title: translate('trans0005'), content: timeoutMsg });
     } else if (options.errorMessageMode === 'message') {
-      // createMessage.error(timeoutMsg);
+      createMessage.error(timeoutMsg);
     }
 
-    throw new Error(timeoutMsg || t('sys.api.apiRequestFailed'));
+    throw new Error(timeoutMsg || translate('trans0006'));
   },
 
   /**
@@ -165,7 +168,7 @@ const transform: AxiosTransform = {
    * @description: 响应错误处理
    */
   responseInterceptorsCatch: (axiosInstance: AxiosInstance, error: any) => {
-    const { t } = useI18n();
+    const { translate } = useLocale();
     // const errorLogStore = useErrorLogStoreWithOut();
     // errorLogStore.addAjaxErrorInfo(error);
     const { response, code, message, config } = error || {};
@@ -180,17 +183,17 @@ const transform: AxiosTransform = {
 
     try {
       if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
-        errMessage = t('sys.api.apiTimeoutMessage');
+        errMessage = translate('trans0007');
       }
       if (err?.includes('Network Error')) {
-        errMessage = t('sys.api.networkExceptionMsg');
+        errMessage = translate('trans0008');
       }
 
       if (errMessage) {
         if (errorMessageMode === 'modal') {
-          // createErrorModal({ title: t('sys.api.errorTip'), content: errMessage });
+          createErrorModal({ title: translate('trans0005'), content: errMessage });
         } else if (errorMessageMode === 'message') {
-          // createMessage.error(errMessage);
+          createMessage.error(errMessage);
         }
         return Promise.reject(error);
       }
@@ -200,7 +203,7 @@ const transform: AxiosTransform = {
 
     // checkStatus(error?.response?.status, msg, errorMessageMode);
 
-    // 添加自动重试机制 保险起见 只针对GET请求
+    // 针对GET请求添加自动重试机制
     const retryRequest = new AxiosRetry();
     const { isOpenRetry } = config.requestOptions.retryRequest;
     config.method?.toUpperCase() === RequestEnum.GET &&
@@ -213,20 +216,15 @@ const transform: AxiosTransform = {
 
 function createAxios(opt?: Partial<CreateAxiosOptions>) {
   return new AxiosBox(
-    // 深度合并
     deepMerge(
       {
-        
         // authentication schemes，e.g: Bearer
         // authenticationScheme: 'Bearer',
         authenticationScheme: '',
         timeout: 10 * 1000,
-        // 基础接口地址
-        // baseURL: '', // globSetting.apiUrl,
-
-        headers: { 'Content-Type': ContentTypeEnum.JSON },
         // 如果是form-data格式
         // headers: { 'Content-Type': ContentTypeEnum.FORM_URLENCODED },
+        headers: { 'Content-Type': ContentTypeEnum.JSON },
         // 数据处理方式
         transform: clone(transform),
         // 配置项，下面的选项都可以在独立的接口请求中覆盖

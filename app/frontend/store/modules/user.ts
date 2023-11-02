@@ -3,6 +3,11 @@ import { defineStore } from 'pinia';
 import { store } from '@/store';
 import { PERMISSIONS_KEY, TOKEN_KEY, USER_INFO_KEY } from '@/constants/cache';
 import { getAuthCache, setAuthCache } from '@/utils/auth';
+import { login } from '@/api/user';
+import { GetUserInfoModel, LoginParams } from '@/api/model/user';
+import { ErrorMessageMode } from '@/constants/http';
+import { PageEnum } from '@/router/constant';
+import { router } from '@/router';
 
 interface IUserState {
   userInfo: Nullable<UserInfo>;
@@ -45,6 +50,48 @@ export const useUserStore = defineStore({
       this.userInfo = null;
       this.token = '';
       this.permissions = [];
+    },
+    /**
+     * @description: login
+     */
+    // const userInfo = await userStore.login({
+    //   password: data.password,
+    //   username: data.account,
+    //   mode: 'none', //不要默认的错误提示
+    // });
+    async login(
+      params: LoginParams & {
+        goHome?: boolean;
+        mode?: ErrorMessageMode;
+      },
+    ): Promise<GetUserInfoModel | null> {
+      try {
+        const { goHome = true, mode, ...loginParams } = params;
+        const data = await login(loginParams, mode);
+        const { token } = data;
+
+        this.setToken(token);
+        return this.afterLoginAction(goHome);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+    afterLoginAction(goHome?: boolean) {},
+    /**
+     * @description: logout
+     */
+    async logout(goLogin = false) {
+      if (this.getToken) {
+        try {
+          // await doLogout();
+        } catch {
+          console.log('注销Token失败');
+        }
+      }
+      this.setToken(undefined);
+      // this.setSessionTimeout(false);
+      this.setUserInfo(null);
+      goLogin && router.push(PageEnum.BASE_LOGIN);
     },
   }
 })
