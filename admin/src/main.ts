@@ -7,6 +7,7 @@ import 'ant-design-vue/dist/reset.css';
 import { initAppConfigStore } from './init';
 import { registerGlobComp } from './components/registerGlobComp';
 import { setupRouterGuard } from './router/guard';
+import '@/style/app.css'
 
 async function bootstrap() {
   const app = createApp(App);

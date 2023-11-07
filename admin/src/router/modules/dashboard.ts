@@ -1,11 +1,10 @@
-import type { AppRouteRecordRaw } from '@/router/types';
+import { Layout } from '../constant';
+import { RouteRecordRaw } from 'vue-router';
 
-import { LAYOUT } from '@/constants/page';
-
-const dashboard: AppRouteRecordRaw = {
+const dashboard: RouteRecordRaw = {
   path: '/dashboard',
   name: 'Dashboard',
-  component: LAYOUT,
+  component: Layout,
   redirect: '/dashboard/analysis',
   meta: {
     icon: 'ion:grid-outline',

@@ -1,5 +1,5 @@
 <template>
-  <div>{{ $t('trans0001', { msg: 'hello' }) }}</div>
+  <div class="text-3xl font-bold underline">{{ $t('trans0001') }}</div>
   <my-dropdown
     placement="bottom"
     :trigger="['click']"
@@ -8,36 +8,12 @@
     @menu-event="handleMenuEvent"
     overlayClassName="app-locale-picker-overlay"
   >
-    <span class="cursor-pointer flex items-center">
+    <span class="cursor-pointer">
       <span v-if="showText" class="ml-1">{{ getLangText }}</span>
+      <DownOutlined />
     </span>
   </my-dropdown>
-  <div class="my-swiper">
-    <swiper
-      :effect="'coverflow'"
-      :loop="true"
-      :grabCursor="true"
-      :centeredSlides="true"
-      :slidesPerView="2"
-      :coverflowEffect="{
-        rotate: 0,
-        stretch: 10,
-        depth: 100,
-        modifier: 1,
-        slideShadows: true,
-      }"
-      :navigation="true"
-      :pagination="true"
-      :modules="modules"
-      class="mySwiper"
-    >
-      <swiper-slide>1</swiper-slide>
-      <swiper-slide>2</swiper-slide>
-      <swiper-slide>3</swiper-slide>
-      <swiper-slide>4</swiper-slide>
-      <swiper-slide>5</swiper-slide>
-    </swiper>
-  </div>
+  <a-button type="primary" @click="login">Primary Button</a-button>
 </template>
 
 <script setup lang="ts">
@@ -46,20 +22,12 @@ import { type IDropMenu } from '@/components/dropdown';
 import { useLocale } from '@/locale/useLocale';
 import { computed, ref, unref, watchEffect } from 'vue';
 import { langList } from '@/settings/locale';
-
-import { Swiper, SwiperSlide } from 'swiper/vue';
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/effect-cards';
-import 'swiper/css/pagination';
-// import required modules
-import { Navigation, EffectCoverflow, Pagination } from 'swiper/modules';
-
-const modules = [ Navigation, EffectCoverflow, Pagination];
+import { DownOutlined } from '@ant-design/icons-vue';
+import { useUserStore } from '@/store/modules/user';
 
 const { changeLang, getLang } = useLocale();
 const selectedKeys = ref<string[]>([]);
+const userStore = useUserStore();
 
 const props = defineProps({
   showText: { type: Boolean, default: true },
@@ -88,39 +56,14 @@ function handleMenuEvent(menu: IDropMenu) {
   }
   toggleLocale(menu.key as string);
 }
+async function login() {
+  const data = await userStore.login({
+    email: 'admin',
+    password: '123456',
+  })
+  console.log(data)
+}
 </script>
 
 <style>
-.my-swiper {
-  width: 400px;
-  height: 100px;
-}
-.swiper {
-  width: 100%;
-}
-.swiper-slide {
-  width: 400px;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  font-weight: bold;
-  color: #fff;
-}
-.swiper-slide:nth-child(1n) {
-  background-color: rgb(206, 17, 17);
-}
-.swiper-slide:nth-child(2n) {
-  background-color: rgb(0, 140, 255);
-}
-.swiper-slide:nth-child(3n) {
-  background-color: rgb(10, 184, 111);
-}
-.swiper-slide:nth-child(4n) {
-  background-color: rgb(211, 122, 7);
-}
-.swiper-slide:nth-child(5n) {
-  background-color: rgb(118, 163, 12);
-}
 </style>

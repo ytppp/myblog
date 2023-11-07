@@ -1,5 +1,5 @@
 <template>
   <div>
-    redirect
+    analysis
   </div>
 </template>

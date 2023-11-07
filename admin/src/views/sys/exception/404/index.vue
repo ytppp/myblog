@@ -1,5 +1,5 @@
 <template>
   <div>
-    redirect
+    404
   </div>
 </template>

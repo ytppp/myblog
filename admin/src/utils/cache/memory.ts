@@ -12,8 +12,7 @@ export class Memory<T = any, V = any> {
   private alive: number;
 
   constructor(alive = NOT_ALIVE) {
-    // Unit second
-    this.alive = alive * 1000;
+    this.alive = alive * 1000; // 单位 秒
   }
 
   get getCache() {

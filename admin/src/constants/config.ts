@@ -14,6 +14,8 @@ export interface UserInfo {
   userId: string | number;
   username: string;
   email: string;
+  permissions: string[];
+  homePath?: string;
 }
 
 // base global local key
@@ -35,8 +37,11 @@ export enum CacheTypeEnum {
 }
 
 export interface ProjectConfig {
-  // Storage location of permission related information
-  permissionCacheType: CacheTypeEnum;
-  // Permission mode
-  permissionMode: PermissionModeEnum;
+  authCacheType: CacheTypeEnum;
+  sessionTimeoutProcessing: SessionTimeoutProcessingEnum;
+}
+
+export enum SessionTimeoutProcessingEnum {
+  ROUTE_JUMP,
+  PAGE_COVERAGE,
 }

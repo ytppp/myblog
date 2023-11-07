@@ -2,23 +2,27 @@ import { UserInfo } from '@/constants/config';
 import { defineStore } from 'pinia';
 import { store } from '@/store';
 import { PERMISSIONS_KEY, TOKEN_KEY, USER_INFO_KEY } from '@/constants/cache';
+import { getAuthCache, setAuthCache } from '@/utils/auth';
+import { getUserInfo, login, logout } from '@/api/user';
+import { GetUserInfoModel, LoginParams } from '@/api/model/user';
+import { ErrorMessageMode } from '@/constants/http';
+import { PageEnum } from '@/router/constant';
+import { router } from '@/router';
+import { isArray } from 'lodash-es';
 
-interface UserState {
+interface IUserState {
   userInfo: Nullable<UserInfo>;
-  token?: string;
+  token: string;
   permissions: string[];
-  sessionTimeout?: boolean;
+  sessionTimeout: boolean;
   lastUpdateTime: number;
 }
 
 export const useUserStore = defineStore({
   id: 'app-user-store',
-  state: (): UserState => ({
-    // user info
+  state: (): IUserState => ({
     userInfo: null,
-    // token
-    token: undefined,
-    // permissions
+    token: '',
     permissions: [],
     // Whether the login expired
     sessionTimeout: false,
@@ -43,9 +47,9 @@ export const useUserStore = defineStore({
     },
   },
   actions: {
-    setToken(info: string | undefined) {
-      this.token = info ? info : ''; // for null or undefined value
-      setAuthCache(TOKEN_KEY, info);
+    setToken(token: string | undefined) {
+      this.token = token ? token : '';
+      setAuthCache(TOKEN_KEY, token);
     },
     setPermissions(permissions: string[]) {
       this.permissions = permissions;
@@ -64,6 +68,77 @@ export const useUserStore = defineStore({
       this.token = '';
       this.permissions = [];
       this.sessionTimeout = false;
+    },
+    /**
+     * @description: login
+     */
+    async login(
+      params: LoginParams & {
+        goHome?: boolean;
+        mode?: ErrorMessageMode;
+      },
+    ): Promise<GetUserInfoModel | null> {
+      try {
+        const { goHome = true, mode, ...loginParams } = params;
+        const data = await login(loginParams, mode);
+        const { token } = data;
+
+        this.setToken(token);
+        return this.afterLoginAction(goHome);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+    async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
+      if (!this.getToken) return null;
+      // get user info
+      const userInfo = await this.getUserInfoAction();
+
+      const sessionTimeout = this.sessionTimeout;
+      if (sessionTimeout) {
+        this.setSessionTimeout(false);
+      } else {
+        // const permissionStore = usePermissionStore();
+        // if (!permissionStore.isDynamicAddedRoute) {
+        //   const routes = await permissionStore.buildRoutesAction();
+        //   routes.forEach((route) => {
+        //     router.addRoute(route as unknown as RouteRecordRaw);
+        //   });
+        //   router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
+        //   permissionStore.setDynamicAddedRoute(true);
+        // }
+        goHome && (await router.replace(userInfo?.homePath || PageEnum.BASE_HOME));
+      }
+      return userInfo;
+    },
+    async getUserInfoAction(): Promise<UserInfo | null> {
+      if (!this.getToken) return null;
+      const userInfo = await getUserInfo();
+      const { permissions = [] } = userInfo;
+      if (isArray(permissions)) {
+        this.setPermissions(permissions);
+      } else {
+        userInfo.permissions = [];
+        this.setPermissions([]);
+      }
+      this.setUserInfo(userInfo);
+      return userInfo;
+    },
+    /**
+     * @description: logout
+     */
+    async logout(goLogin = false) {
+      if (this.getToken) {
+        try {
+          await logout();
+        } catch {
+          console.log('注销Token失败');
+        }
+      }
+      this.setToken(undefined);
+      this.setSessionTimeout(false);
+      this.setUserInfo(null);
+      goLogin && router.push(PageEnum.BASE_LOGIN);
     },
   }
 })
