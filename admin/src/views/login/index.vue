@@ -1,61 +1,65 @@
 <template>
-  <div class="text-3xl font-bold underline">{{ $t('trans0001') }}</div>
-  <my-dropdown
-    placement="bottom"
-    :trigger="['click']"
-    :dropMenuList="langList"
-    :selectedKeys="selectedKeys"
-    @menu-event="handleMenuEvent"
-    overlayClassName="app-locale-picker-overlay"
-  >
-    <span class="cursor-pointer">
-      <span v-if="showText" class="ml-1">{{ getLangText }}</span>
-      <DownOutlined />
-    </span>
-  </my-dropdown>
-  <a-button type="primary" @click="login">Primary Button</a-button>
+  <div class="relative w-full h-full px-4">
+    <div class="flex items-center absolute right-4 top-4 z-10">
+      <locale-picker />
+    </div>
+    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style="width: 430px;">
+      <h2 class="mb-3 text-2xl font-bold text-center xl:text-3xl enter-x xl:text-left">
+        login
+      </h2>
+      <a-form
+        :model="formState"
+        autocomplete="off"
+      >
+        <a-form-item>
+          <a-input size="large" v-model:value="formState.username">
+            <template #prefix><UserOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
+          </a-input>
+        </a-form-item>
+        <a-form-item>
+          <a-input-password size="large" v-model:value="formState.password">
+            <template #prefix><LockOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
+          </a-input-password>
+        </a-form-item>
+        <a-row>
+          <a-col :span="12">
+            <a-form-item>
+              <a-checkbox v-model:checked="formState.remember">Remember me</a-checkbox>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12" class="text-right">
+            <a-form-item>
+              <a-button type="link" size="small">login ?</a-button>
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-form-item>
+          <a-button type="primary" @click="login" block>login</a-button>
+        </a-form-item>
+      </a-form>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { LangType } from '@/constants/config';
-import { type IDropMenu } from '@/components/dropdown';
-import { useLocale } from '@/locale/useLocale';
-import { computed, ref, unref, watchEffect } from 'vue';
-import { langList } from '@/settings/locale';
-import { DownOutlined } from '@ant-design/icons-vue';
 import { useUserStore } from '@/store/modules/user';
+import { LocalePicker } from '@/components/application';
+import { reactive } from 'vue';
 
-const { changeLang, getLang } = useLocale();
-const selectedKeys = ref<string[]>([]);
 const userStore = useUserStore();
 
-const props = defineProps({
-  showText: { type: Boolean, default: true },
-  reload: { type: Boolean },
-});
-const getLangText = computed(() => {
-  const key = selectedKeys.value[0];
-  if (!key) {
-    return '';
-  }
-  return langList.find((item) => item.key === key)?.text;
+interface FormState {
+  username: string;
+  password: string;
+  remember: boolean;
+}
+
+const formState = reactive<FormState>({
+  username: '',
+  password: '',
+  remember: true,
 });
 
-watchEffect(() => {
-  selectedKeys.value = [unref(getLang)];
-});
-
-async function toggleLocale(lang: LangType | string) {
-  await changeLang(lang as LangType);
-  selectedKeys.value = [lang as string];
-  props.reload && location.reload();
-}
-function handleMenuEvent(menu: IDropMenu) {
-  if (unref(getLang) === menu.key) {
-    return;
-  }
-  toggleLocale(menu.key as string);
-}
 async function login() {
   const data = await userStore.login({
     email: 'admin',
