@@ -22,7 +22,10 @@
   "trans0021": "Operation failed",
   "trans0022": "The operation failed, the system is abnormal!",
   "trans0023": "network anomaly",
-  "trans0024": "trans0024",
-  "trans0025": "trans0025",
-  "trans0026": "trans0026"
+  "trans0024": "Sign in",
+  "trans0025": "Email",
+  "trans0026": "Password",
+  "trans0027": "Forget Password?",
+  "trans0028": "Remember me",
+  "trans0029": "Please input {val}"
 }

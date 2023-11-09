@@ -6,7 +6,7 @@ import { createLocalStorage } from '@/utils/cache/storage';
 import { LOCALE_KEY } from '@/constants/cache';
 
 interface ILocaleStoreState {
-  localeStore: ILocaleStore;
+  localeStore: ILocaleStore
 }
 
 const ls = createLocalStorage();

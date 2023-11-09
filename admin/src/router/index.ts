@@ -3,6 +3,7 @@ import { RouteRecordRaw, createRouter, createWebHashHistory } from 'vue-router';
 import { Page404Route } from './basic';
 import { mainOutRoutes } from './main-out';
 import { PageEnum } from './constant';
+import { setupRouterGuard } from './guard';
 
 // import.meta.glob() 直接引入所有的模块 Vite 独有的功能
 const modules = import.meta.glob('./modules/**/*.ts', { eager: true });
@@ -58,4 +59,7 @@ export const router = createRouter({
 
 export function setupRouter(app: App<Element>) {
   app.use(router);
+
+  // router-guard
+  setupRouterGuard(router);
 }

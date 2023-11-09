@@ -9,7 +9,7 @@
   >
     <span class="cursor-pointer">
       <span v-if="showText" class="ml-1">{{ getLangText }}</span>
-      <TranslationOutlined />
+      <TranslationOutlined class="text-xl" />
     </span>
   </my-dropdown>
 </template>
