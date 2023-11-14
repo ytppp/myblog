@@ -27,5 +27,8 @@
   "trans0026": "Password",
   "trans0027": "Forget Password?",
   "trans0028": "Remember me",
-  "trans0029": "Please input {val}"
+  "trans0029": "Please input {val}",
+  "trans0030": "Dark Mode",
+  "trans0031": "Light Mode",
+  "trans0032": "Automatic Mode"
 }

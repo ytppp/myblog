@@ -9,7 +9,7 @@ import { computed } from 'vue';
 import './iconfont';
 
 defineOptions({
-  name: 'Icon',
+  name: 'MyIcon',
 });
 const props = defineProps({
   icon: {

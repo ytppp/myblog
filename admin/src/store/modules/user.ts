@@ -19,7 +19,7 @@ interface IUserState {
 }
 
 export const useUserStore = defineStore({
-  id: 'app-user-store',
+  id: 'user-store',
   state: (): IUserState => ({
     userInfo: null,
     token: '',

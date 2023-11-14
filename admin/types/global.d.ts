@@ -18,21 +18,3 @@ declare module '*.vue' {
   const Component: DefineComponent<{}, {}, any>;
   export default Component;
 }
-
-// ==============
-
-type Partial<T> = {
-  [P in keyof T]?: T[P];  
-};
-
-type Required<T> = {
-  [P in keyof T]-?: T[P];  
-};
-
-type Readonly<T> = {
-  readonly [P in keyof T]: T[P];  
-};
-
-type Pick<T, K extends keyof T> = {
-  [P in K]: T[P];  
-};

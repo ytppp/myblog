@@ -23,9 +23,10 @@ declare module 'vue' {
     ARow: typeof import('ant-design-vue/es')['Row']
     ASpace: typeof import('ant-design-vue/es')['Space']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
-    LocalePicker: typeof import('./src/components/application/src/locale-picker.vue')['default']
+    LocalePicker: typeof import('./src/components/app/src/locale-picker.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Src: typeof import('./src/components/dropdown/src/index.vue')['default']
+    ThemePicker: typeof import('./src/components/app/src/theme-picker.vue')['default']
   }
 }

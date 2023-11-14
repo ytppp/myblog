@@ -10,10 +10,10 @@
 </template>
 
 <script setup lang="ts">
-import { LocalePicker } from '@/components/application';
+import { LocalePicker } from '@/components/app';
 import LoginForm from './login-form.vue';
 
 </script>
 
 <style>
-</style>
+</style>@/components/app

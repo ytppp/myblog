@@ -1,9 +1,12 @@
 export type LangType = 'zh-CN' | 'en-US';
 
+export type ThemeType = 'dark' | 'light';
+
 export interface ILocaleStore {
   lang: LangType,
   fallbackLang: LangType;
   availableLangs: LangType[];
+  theme: ThemeType;
 }
 
 export interface GlobEnvConfig {

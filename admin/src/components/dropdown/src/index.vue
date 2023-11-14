@@ -17,15 +17,15 @@
               :disabled="item.disabled"
             >
               <template #icon v-if="item.popConfirm.icon">
-                <Icon :icon="item.popConfirm.icon" />
+                <my-icon :icon="item.popConfirm.icon" />
               </template>
               <div>
-                <Icon :icon="item.icon" v-if="item.icon" />
+                <my-icon :icon="item.icon" v-if="item.icon" />
                 <span class="ml-1">{{ item.text }}</span>
               </div>
             </a-popconfirm>
             <template v-else>
-              <Icon :icon="item.icon" v-if="item.icon" />
+              <my-icon :icon="item.icon" v-if="item.icon" />
               <span class="ml-1">{{ item.text }}</span>
             </template>
           </a-menu-item>
