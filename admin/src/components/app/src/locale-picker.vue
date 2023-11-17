@@ -41,15 +41,15 @@ watchEffect(() => {
   selectedKeys.value = [unref(getLang)];
 });
 
-async function toggleLocale(lang: LangType | string) {
-  await changeLang(lang as LangType);
-  selectedKeys.value = [lang as string];
-  props.reload && location.reload();
-}
 function handleMenuEvent(menu: IDropMenu) {
   if (unref(getLang) === menu.key) {
     return;
   }
   toggleLocale(menu.key as string);
+}
+async function toggleLocale(lang: LangType | string) {
+  await changeLang(lang as LangType);
+  selectedKeys.value = [lang as string];
+  props.reload && location.reload();
 }
 </script>

@@ -2,13 +2,13 @@
   <my-dropdown
     placement="bottom"
     :trigger="['click']"
-    :dropMenuList="langList"
+    :dropMenuList="mappedThemeList"
     :selectedKeys="selectedKeys"
     @menu-event="handleMenuEvent"
     overlayClassName="app-locale-picker-overlay"
   >
     <!-- light -->
-    <span class="cursor-pointer">
+    <span class="cursor-pointer" v-if="isLight">
       <svg
         className="fill-gray-400"
         xmlns="http://www.w3.org/2000/svg"
@@ -20,7 +20,7 @@
       </svg>
     </span>
     <!-- dark -->
-    <span class="cursor-pointer">
+    <span class="cursor-pointer" v-if="isDark">
       <svg
         className="fill-gray-400"
         xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +32,7 @@
       </svg>
     </span>
     <!-- auto -->
-    <span class="cursor-pointer">
+    <span class="cursor-pointer" v-if="isAuto">
       <svg
         className="fill-gray-400"
         xmlns="http://www.w3.org/2000/svg"
@@ -47,23 +47,48 @@
 </template>
 
 <script setup lang="ts">
-import { langList } from '@/settings/locale';
+import { THEME, themeList } from '@/settings/locale';
 import { type IDropMenu } from '@/components/dropdown';
 import { useLocale } from '@/locale/useLocale';
-import { ref, unref } from 'vue';
+import { computed, ref, unref, watchEffect } from 'vue';
 import { ThemeType } from '@/constants/config';
 import { useTheme } from '@/hooks/useTheme';
 
 const { translate } = useLocale();
+const { getTheme, changeTheme } = useTheme();
 const selectedKeys = ref<string[]>([]);
-const { getTheme } = useTheme();
 
-langList.map(item => ({
+const mappedThemeList = themeList.map(item => ({
   ...item,
   text: translate(item.text)
 }))
+watchEffect(() => {
+  selectedKeys.value = [unref(getTheme)];
+});
+const isLight = computed(() => {
+  const key = selectedKeys.value[0];
+  if (!key) {
+    return false;
+  }
+  return key === THEME.LIGHT;
+});
+const isDark = computed(() => {
+  const key = selectedKeys.value[0];
+  if (!key) {
+    return false;
+  }
+  return key === THEME.DARK;
+});
+const isAuto = computed(() => {
+  const key = selectedKeys.value[0];
+  if (!key) {
+    return false;
+  }
+  return key === 'auto';
+});
 
 function handleMenuEvent(menu: IDropMenu) {
+  console.log(menu.key)
   if (unref(getTheme) === menu.key) {
     return;
   }
@@ -71,5 +96,6 @@ function handleMenuEvent(menu: IDropMenu) {
 }
 async function toggleLocale(theme: ThemeType | string) {
   console.log('theme', theme)
+  changeTheme(theme as any);
 }
 </script>
