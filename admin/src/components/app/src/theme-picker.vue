@@ -10,7 +10,6 @@
     <!-- light -->
     <span class="cursor-pointer" v-if="isLight">
       <svg
-        className="fill-gray-400"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 1024 1024"
         fill="currentColor"
@@ -22,7 +21,6 @@
     <!-- dark -->
     <span class="cursor-pointer" v-if="isDark">
       <svg
-        className="fill-gray-400"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 1024 1024"
         fill="currentColor"
@@ -34,7 +32,6 @@
     <!-- auto -->
     <span class="cursor-pointer" v-if="isAuto">
       <svg
-        className="fill-gray-400"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 1024 1024"
         fill="currentColor"
@@ -50,20 +47,26 @@
 import { THEME, themeList } from '@/settings/locale';
 import { type IDropMenu } from '@/components/dropdown';
 import { useLocale } from '@/locale/useLocale';
-import { computed, ref, unref, watchEffect } from 'vue';
+import { computed, ref, unref, watchEffect, watch } from 'vue';
 import { ThemeType } from '@/constants/config';
 import { useTheme } from '@/hooks/useTheme';
 
-const { translate } = useLocale();
+const { translate, getLang } = useLocale();
 const { getTheme, changeTheme } = useTheme();
 const selectedKeys = ref<string[]>([]);
 
-const mappedThemeList = themeList.map(item => ({
+let mappedThemeList = themeList.map(item => ({
   ...item,
   text: translate(item.text)
 }))
 watchEffect(() => {
   selectedKeys.value = [unref(getTheme)];
+});
+watch(getLang, () => {
+  mappedThemeList = themeList.map(item => ({
+    ...item,
+    text: translate(item.text)
+  }))
 });
 const isLight = computed(() => {
   const key = selectedKeys.value[0];

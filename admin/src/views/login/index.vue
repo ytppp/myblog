@@ -1,8 +1,10 @@
 <template>
   <div class="relative w-full h-full">
-    <div class="flex items-center absolute right-4 top-4">
-      <locale-picker />
-      <theme-picker />
+    <div class="absolute right-4 top-4">
+      <div class="flex items-center space-x-2">
+        <locale-picker />
+        <theme-picker />
+      </div>
     </div>
     <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-96">
       <login-form />
@@ -17,4 +19,4 @@ import LoginForm from './login-form.vue';
 </script>
 
 <style>
-</style>@/components/app
+</style>
