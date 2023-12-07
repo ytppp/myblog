@@ -1,9 +1,10 @@
-const xlsx = require('xlsx');
-const readline = require('readline');
-const path = require('path');
-const fs = require('fs');
+import xlsx from 'xlsx';
+import readline from 'readline';
+import path from 'path';
+import fs from 'fs';
 
-const LangXlsx = 'lang.xlsx';
+const LangXlsxDir = path.resolve(path.resolve(), 'docs');
+const LangXlsxTitle = 'lang.xlsx';
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -13,8 +14,8 @@ function excel2json(excel, trans) {
   // 加载excel表格
   const { Sheets, SheetNames } = xlsx.readFile(excel, {});
   SheetNames.forEach((name) => {
-    result = {};
-    lang_list = [];
+    let result = {};
+    let lang_list = [];
 
     const sheet = Sheets[name];
     const range = xlsx.utils.decode_range(sheet['!ref']);
@@ -36,8 +37,8 @@ function excel2json(excel, trans) {
     for (let row = range.s.r; row <= range.e.r; row++) {
       if (row > 0) {
         lang_list.forEach((lang, i) => {
-          key = sheet[xlsx.utils.encode_cell({ r: row, c: 0 })]?.v;
-          val = sheet[xlsx.utils.encode_cell({ r: row, c: i + 1 })]?.v;
+          let key = sheet[xlsx.utils.encode_cell({ r: row, c: 0 })]?.v;
+          let val = sheet[xlsx.utils.encode_cell({ r: row, c: i + 1 })]?.v;
           if (val) {
             result[lang][key] = val;
           }
@@ -68,14 +69,17 @@ console.log('=== excel翻译文件转json工具 ===');
 console.log('\n');
 console.log('规则:');
 console.log('1. 翻译文件必须是.xlsx格式的文件');
-console.log('2. 可以不填写翻译文件所在的路径，默认当前文件夹下的lang.xlsx');
+console.log('2. 可以不填写翻译文件所在的路径，默认docs目录下的lang.xlsx');
 console.log(
   '3. 若填写翻译文件所在的路径，可以是绝对路径或相对路径。可以不填写翻译文件名，默认lang.xlsx'
 );
 console.log(
-  '4. 可以不填写翻译文件输出路径，不填写则默认当前文件夹的trans目录下'
+  '4. 可以不填写翻译文件输出路径，默认docs目录'
 );
 console.log('5. 若填写翻译文件输出路径，可以是绝对路径或相对路径');
+console.log(
+  '6. 翻译文件输出路径在指定文件夹的trans目录下'
+);
 console.log('\n');
 
 rl.question(`请输入翻译文件所在的路径：`, (excel) => {
@@ -84,7 +88,7 @@ rl.question(`请输入翻译文件所在的路径：`, (excel) => {
     let trans_path = 'trans';
 
     if (!excel) {
-      excel = __dirname;
+      excel = LangXlsxDir;
     }
     if (excel && excel.includes('.xlsx') && !excel.endsWith('.xlsx')) {
       console.log('翻译文件必须是.xlsx格式的文件');
@@ -94,19 +98,22 @@ rl.question(`请输入翻译文件所在的路径：`, (excel) => {
     if (path.isAbsolute(excel)) {
       excel_path = excel.endsWith('.xlsx')
         ? excel
-        : path.resolve(excel, LangXlsx);
+        : path.resolve(excel, LangXlsxTitle);
     } else {
       excel_path = path.resolve(
-        __dirname,
-        excel.endsWith('.xlsx') ? excel : path.join(excel, LangXlsx)
+        LangXlsxDir,
+        excel.endsWith('.xlsx') ? excel : path.join(excel, LangXlsxTitle)
       );
     }
 
     if (!trans) {
-      trans = __dirname;
-    }
-    if (!path.isAbsolute(trans)) {
-      trans_path = path.resolve(__dirname, trans);
+      trans_path = path.resolve(LangXlsxDir, trans_path);
+    } else {
+      if (path.isAbsolute(trans)) {
+        trans_path = path.resolve(trans, trans_path);
+      } else {
+        trans_path = path.resolve(LangXlsxDir, trans, trans_path);
+      }
     }
     excel2json(excel_path, trans_path);
     rl.close();
