@@ -4,10 +4,7 @@
   "type": "module",
   "version": "0.0.0",
   "scripts": {
-    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=/assets",
-    "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify",
-    "dev": "bin/vite dev",
-    "transform": "node docs/index.js"
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=/assets"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
