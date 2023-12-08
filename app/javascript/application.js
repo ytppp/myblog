@@ -2,8 +2,7 @@
 import '@hotwired/turbo-rails'
 import 'alpine-turbo-drive-adapter'
 import Alpine from 'alpinejs'
-import "controllers"
-import 'ant-design-vue/dist/reset.css';
+import "./controllers"
 window.Alpine = Alpine
 Alpine.start()
 
