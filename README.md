@@ -20,3 +20,20 @@ $ bin/setup # 下载 gem, create, migrate, seed 数据库
 ```
 $ bin/dev
 ```
+
+## how to fix follow questions
+
+1. Rails: Address already in use - bind(2) (Errno::EADDRINUSE) ?
+
+answer:
+
+```
+$ lsof -wni tcp:3000
+$ kill -9 PID
+```
+
+2. A server is already running ?
+
+answer:
+
+delete ./tmp/pids/server.pid
